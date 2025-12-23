@@ -60,4 +60,7 @@ CREATE TABLE expenses (
 );
 
 
-
+CREATE INDEX idx_income_user ON incomes(user_id);
+CREATE INDEX idx_expense_user ON expenses(user_id);
+CREATE INDEX idx_income_category ON incomes(category_id);
+CREATE INDEX idx_expense_category ON expenses(category_id);
