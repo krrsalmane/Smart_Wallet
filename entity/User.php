@@ -1,32 +1,53 @@
-<?php 
+<?php
+require __DIR__ . "/../config/sql.php";
 
- class User {
+class User
 
-  private int $id;
-  private string $full_Name;
-  private string $email;
-  private string $password;
+{
 
-public function getId():int{
-    return $this -> id;}
+    private $db;
+    private $full_Name;
+    private $email;
+    private $password;
 
-public function setId (int $id):void{
-    $this -> id = $id;
- } 
- public function getFull_Name():string{
-    return $this -> full_Name;
- }
-public function setFull_Name(string $full_Name):void{
-    $this -> full_Name  = $full_Name;
+    public function __construct(string $full_Name, string $email, string $password){
+        $this->full_Name = $full_Name;
+        $this->email = $email;
+        $this->password = $password;
+        $std = new Database();
+        $this->db = $std->getConnection();
+    }
+
+    public function setFullName(string $fullName): void
+    {
+        $this->full_Name = $fullName;
+    }
+
+    public function setEmail(string $email): void
+    {
+        $this->email = $email;
+    }
+
+    public function setPassword(string $password): void
+    {
+        $this->password = password_hash($password, PASSWORD_DEFAULT);
+    }
+
+     public function register(): array {
+        $errors = [];
+
+        if (empty($this->full_Name) || empty($this->email) || empty($this->password)) {
+            $errors[] = "you should all the fields";
+            return $errors;
+        }
+
+        $stmt = $this->db->prepare("SELECT id FROM users WHERE email = ?");
+        $stmt->execute([$this->email]);
+        if ($stmt->rowCount() > 0) {
+            $errors[] = " email already exist";
+            return $errors;
+        }
+
+       
+    }
 }
-public function getEmail():string{
-    return $this -> email;
-}
-public function setEmail(string $email):void{
-    $this -> email = $email;
-}
-public function getPassword():string{
-    return $this -> password;
-}
-}
-?>
