@@ -1,20 +1,19 @@
 <?php
+require __DIR__ . "/../config/sql.php";
 
 class operation
 {
-    protected int $id;
+    protected $db;
     protected float $amount;
     protected string $description;
     protected String  $my_date;
 
-     public function getId(): int
-    {
-        return $this->id;
-    }
-
-    public function setId(int $id): void
-    {
-        $this->id = $id;
+      public function __construct( $amount,  $description,  $my_date){
+        $this->amount = $amount;
+        $this->description = $description;
+        $this->my_date = $my_date;
+        $std = new Database();
+        $this->db = $std->getConnection();
     }
 
 
