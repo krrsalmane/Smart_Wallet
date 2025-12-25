@@ -10,7 +10,7 @@ class User
     private $email;
     private $password;
 
-    public function __construct(string $full_Name, string $email, string $password){
+    public function __construct( $full_Name,  $email,  $password){
         $this->full_Name = $full_Name;
         $this->email = $email;
         $this->password = $password;
@@ -57,5 +57,20 @@ class User
             $errors[] = "Erreur something went wrong";
             return $errors;
         }
+    }
+
+    public function login(string $email, string $password): bool {
+        $stmt = $this->db->prepare("SELECT * FROM users WHERE email = ?");
+        $stmt->execute([$email]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+       
+        if ($user && password_verify($password, $user['password'])) {
+            
+            $_SESSION['user_id'] = $user['id'];
+            $_SESSION['user_name'] = $user['full_name'];
+            return true;
+        }
+        return false;
     }
 }
