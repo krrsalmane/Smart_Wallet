@@ -48,6 +48,14 @@ class User
             return $errors;
         }
 
-       
+        $hashedPassword = password_hash($this->password, PASSWORD_DEFAULT);
+
+        $stmt = $this->db->prepare("INSERT INTO users (full_name, email, password) VALUES (?, ?, ?)");
+        if ($stmt->execute([$this->full_Name, $this->email, $hashedPassword])) {
+            return []; 
+        } else {
+            $errors[] = "Erreur something went wrong";
+            return $errors;
+        }
     }
 }
