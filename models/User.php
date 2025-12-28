@@ -1,5 +1,5 @@
 <?php
-require __DIR__ . "/../config/sql.php";
+require __DIR__ . "/../config/Database.php";
 
 class User
 
