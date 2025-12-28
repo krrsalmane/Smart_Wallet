@@ -1,6 +1,6 @@
 <?php
-require __DIR__ . "/../config/sql.php";
-
+require_once __DIR__ . "/../config/Database.php";
+// echo __DIR__;
 class operation
 {
     protected $db;
