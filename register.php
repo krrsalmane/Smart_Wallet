@@ -1,33 +1,27 @@
 <?php
-session_start();
+require_once "models/User.php";
 
-require_once 'models/User.php';
+$error = null;
+$success = null;
 
-// Redirect if already logged in
-if (User::isLoggedIn()) {
-    header('Location: index.php');
-    exit;
-}
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    $fullName = $_POST['full_name'];
+    $email = $_POST['email'];
+    $password = $_POST['password'];
+    $confirmPassword = $_POST['confirm_password'];
 
-$error = '';
-$success = '';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $full_name = $_POST['full_name'] ?? '';
-    $email = $_POST['email'] ?? '';
-    $password = $_POST['password'] ?? '';
-    $confirm_password = $_POST['confirm_password'] ?? '';
-
-    if ($password !== $confirm_password) {
-        $error = 'Passwords do not match';
+    if ($password !== $confirmPassword) {
+        $error = "Passwords do not match.";
+    } elseif (strlen($password) < 6) {
+        $error = "Password must be at least 6 characters.";
     } else {
-        $user = new User();
-        $result = $user->register($full_name, $email, $password);
+        $user = new User($fullName, $email, $password);
+        $result = $user->register();
 
-        if ($result['success']) {
-            $success = 'Registration successful! You can now login.';
+        if (empty($result)) {
+            $success = "Account created successfully!";
         } else {
-            $error = $result['message'];
+            $error = $result[0];
         }
     }
 }
@@ -57,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <div class="glass p-10 rounded-3xl w-full max-w-md shadow-2xl">
         <div class="text-center mb-8">
             <h1 class="text-3xl font-extrabold text-white mb-2">Create Account</h1>
-            <p class="text-slate-400 text-sm">Join <span class="text-emerald-400 font-bold">FinSphere</span> today</p>
+            <p class="text-slate-400 text-sm">Join <span class="text-emerald-400 font-bold">IncomeTracker</span> today</p>
         </div>
 
         <?php if ($error): ?>

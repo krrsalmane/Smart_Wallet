@@ -1,5 +1,5 @@
 <?php
-require_once __DIR__ . "/../config/sql.php";
+require_once __DIR__ . "/../config/Database.php";
 
 class Categorie
 {

@@ -1,6 +1,8 @@
 <?php
 session_start();
 
-require_once 'models/User.php';
-
-User::logout();
+$_SESSION = [];
+session_destroy();
+header("Location: login.php");
+exit();
+?>
